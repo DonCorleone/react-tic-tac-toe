@@ -25,6 +25,7 @@ class Game extends React.Component {
 
 	render() {
 		const history = this.state.history;
+		const stepNumber = this.state.stepNumber;
 		const current = history[this.state.stepNumber];
 		const chichi = calculateChichi(current.squares);
 
@@ -34,14 +35,20 @@ class Game extends React.Component {
 				coordinate.coordinates : '';
 			const column = currentCoordinates % 3 + 1; 
 			const row = currentCoordinates < 3 ? 1 : currentCoordinates < 5 ? 2 : 3;
-			const desc = move 
-				? 'Go to move # ' +  move + ' (Row ' + row + ' | Column ' + column + ')'
+			const btnDesc = move 
+				? 'Go to move # ' +  move
 				: 'Go to game start';
+			const moveDesc = move
+				? ' (Row ' + row + ' | Column ' + column + ')'
+				: '';
+
+			const classBold = stepNumber === move ? 'liBold' : 'liRegular';
 			return (
-				<li key={move}>
+				<li key={move} className={classBold}>
 					<button onClick={() => this.jumpTo(move)}>
-						{desc}
+						{btnDesc}
 					</button>
+					{moveDesc}
 				</li>
 			);
 		});
