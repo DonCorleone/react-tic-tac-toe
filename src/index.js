@@ -9,7 +9,7 @@ class Game extends React.Component {
 		super(props);
 		this.state = {
 			history: [{
-				squares: Array(9).fill(null)
+				squares: Array(9).fill(null), coordinates: ''
 			}],
 			stepNumber: 0,
 			xIsNext: true
@@ -28,10 +28,15 @@ class Game extends React.Component {
 		const current = history[this.state.stepNumber];
 		const chichi = calculateChichi(current.squares);
 
-		const moves = history.map((step, move) => {
-			const desc = move ?
-				'Go to move #' + move :
-				'Go to game start';
+		const moves = history.map((step, move, moveCoordinate) => {
+			const coordinate = moveCoordinate[move];
+			const currentCoordinates = move ?
+				coordinate.coordinates : '';
+			const column = currentCoordinates % 3 + 1; 
+			const row = currentCoordinates < 3 ? 1 : currentCoordinates < 5 ? 2 : 3;
+			const desc = move 
+				? 'Go to move # ' +  move + ' (Row ' + row + ' | Column ' + column + ')'
+				: 'Go to game start';
 			return (
 				<li key={move}>
 					<button onClick={() => this.jumpTo(move)}>
@@ -75,7 +80,7 @@ class Game extends React.Component {
 		this.setState({
 			history: history.concat([{
 				squares: squares
-			}]),
+				, coordinates: i} ]),
 			stepNumber: history.length,
 			xIsNext: !this.state.xIsNext
 		});
